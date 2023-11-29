@@ -28,16 +28,10 @@
         </property>
     </bean>
 
-   <!-- Allows accessing the server log -->
-    <!--<bean id="logQuery" class="org.fusesource.insight.log.log4j.Log4jLogQuery"
-          lazy-init="false" scope="singleton"
-          init-method="start" destroy-method="stop">
-    </bean>-->
-
     <!--
         The <broker> element is used to configure the ActiveMQ broker.
     -->
-    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" useJmx="false" dataDirectory="${activemq.data}">
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="localhost" dataDirectory="${activemq.data}">
 
         <destinationPolicy>
             <policyMap>
@@ -59,35 +53,7 @@
             </policyMap>
         </destinationPolicy>
 
-		<!--
-			Security for sending scripts to this machine
-		-->
-		<plugins>
-			<simpleAuthenticationPlugin anonymousAccessAllowed="true" anonymousGroup="everyone">
-				<users>
-					<authenticationUser username="username" password="CHANGEME" groups="admins, everyone"/>
-				</users>
-			</simpleAuthenticationPlugin>
-			<authorizationPlugin>
-				<map>
-					<authorizationMap>
-						<authorizationEntries>
-							<authorizationEntry queue="ss_admin" write="admins" read="admins" admin="admins" />
-							<authorizationEntry topic="iocLogs" write="everyone" read="everyone" admin="everyone" />
-							<authorizationEntry topic="Instrument_CLIENT" write="everyone" read="everyone" admin="everyone" />
-							<authorizationEntry topic="Instrument_SERVER" write="everyone" read="everyone" admin="everyone" />
-							<authorizationEntry topic="Instrument_TALK" write="everyone" read="everyone" admin="everyone" />
-							<authorizationEntry topic="GLOBAL_SERVER" write="everyone" read="everyone" admin="everyone" />
-							<authorizationEntry topic="LOG" write="everyone" read="everyone" admin="everyone" />
-							<authorizationEntry topic="ActiveMQ.Advisory.>" read="everyone" write="everyone" admin="everyone"/>
-						</authorizationEntries>
-					</authorizationMap>
-				</map>
-			</authorizationPlugin>
-		</plugins>
-		
 
-		
         <!--
             The managementContext is used to configure how ActiveMQ is exposed in
             JMX. By default, ActiveMQ uses the MBean server that is started by
@@ -95,9 +61,9 @@
 
             http://activemq.apache.org/jmx.html
         -->
-        <!--<managementContext>
+        <managementContext>
             <managementContext createConnector="false"/>
-        </managementContext>-->
+        </managementContext>
 
         <!--
             Configure message persistence for the broker. The default persistence
@@ -106,9 +72,9 @@
 
             http://activemq.apache.org/persistence.html
         -->
-        <!--<persistenceAdapter>
+        <persistenceAdapter>
             <kahaDB directory="${activemq.data}/kahadb"/>
-        </persistenceAdapter>-->
+        </persistenceAdapter>
 
 
           <!--
@@ -138,11 +104,11 @@
         -->
         <transportConnectors>
             <!-- DOS protection, limit concurrent connections to 1000 and frame size to 100MB -->
-            <transportConnector name="openwire" uri="tcp://0.0.0.0:39990?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
-            <!--<transportConnector name="amqp" uri="amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>-->
-            <transportConnector name="stomp" uri="stomp://0.0.0.0:39991?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
-            <!--<transportConnector name="mqtt" uri="mqtt://0.0.0.0:1883?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>-->
-            <!--<transportConnector name="ws" uri="ws://0.0.0.0:61614?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>-->
+            <transportConnector name="openwire" uri="tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+            <transportConnector name="amqp" uri="amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+            <transportConnector name="stomp" uri="stomp://0.0.0.0:61613?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+            <transportConnector name="mqtt" uri="mqtt://0.0.0.0:1883?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+            <transportConnector name="ws" uri="ws://0.0.0.0:61614?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
         </transportConnectors>
 
         <!-- destroy the spring context on shutdown to stop jetty -->
@@ -158,7 +124,7 @@
 
         Take a look at ${ACTIVEMQ_HOME}/conf/jetty.xml for more details
     -->
-    <!--<import resource="jetty.xml"/>-->
+    <import resource="jetty.xml"/>
 
 </beans>
 <!-- END SNIPPET: example -->
