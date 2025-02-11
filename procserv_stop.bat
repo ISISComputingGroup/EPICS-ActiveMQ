@@ -5,11 +5,13 @@ set MYDIR=%~dp0
 REM kill procservs that manage Active MQ
 
 set CSPID=
-for /F %%i in ( c:\instrument\var\run\EPICS_JMS.pid ) DO set CSPID=%%i
+if exist c:\instrument\var\run\EPICS_JMS.pid (
+    for /F %%i in ( c:\instrument\var\run\EPICS_JMS.pid ) DO set CSPID=%%i
+)
 if "%CSPID%" == "" (
-    @echo JMS server is not running
+    @echo %DATE% %TIME% JMS server is not running
 ) else (
-    @echo Killing JMS server PID %CSPID%
+    @echo %DATE% %TIME% Killing JMS server cygwin PID %CSPID%
     REM %ICPCYGBIN%\kill.exe %CSPID%
     del c:\instrument\var\run\EPICS_JMS.pid
 )
