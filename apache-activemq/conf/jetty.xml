@@ -68,6 +68,22 @@
                   <property name="name" value="X-Content-Type-Options"/>
                   <property name="value" value="nosniff"/>
                 </bean>
+                <bean id="header" class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+                    <property name="pattern" value="*"/>
+                    <property name="name" value="Cache-Control"/>
+                    <property name="value" value="no-store"/>
+                </bean>
+                <bean id="header" class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+                    <property name="pattern" value="*"/>
+                    <property name="name" value="Content-Security-Policy"/>
+                    <property name="value" value="upgrade-insecure-requests; style-src-elem 'self'; style-src 'self'; img-src 'self'; script-src-elem 'self'; default-src 'none'; object-src 'none'; frame-ancestors 'none'; base-uri 'none';" />
+                </bean>
+                <!-- More relaxed rules to allow browsers to properly render XML -->
+                <bean id="header" class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
+                    <property name="pattern" value="/admin/xml/*"/>
+                    <property name="name" value="Content-Security-Policy"/>
+                    <property name="value" value="upgrade-insecure-requests; style-src-elem 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data:; script-src-elem 'self'; default-src 'none'; object-src 'none'; frame-ancestors 'none'; base-uri 'none';" />
+                </bean>
             </list>
         </property>
     </bean>
@@ -186,10 +202,10 @@
 		</property>
 	</bean>
     
-    <bean id="invokeStart" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" 
-    	depends-on="configureJetty, invokeConnectors">
+    <bean id="invokeStart" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+    	depends-on="broker, configureJetty, invokeConnectors">
     	<property name="targetObject" ref="Server" />
-    	<property name="targetMethod" value="start" />  	
+    	<property name="targetMethod" value="start" />
     </bean>
     
     
